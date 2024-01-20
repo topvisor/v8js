@@ -38,6 +38,7 @@ jobs:
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           gclient sync
           ls -la
+          pwd
           ./build/install-bulid-deps.sh
           ./tools/dev/gm.py x64.release.check
 
