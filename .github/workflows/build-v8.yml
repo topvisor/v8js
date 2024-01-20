@@ -23,17 +23,20 @@ jobs:
       - name: install gclient
         run: |
           git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          $GITHUB_WORKSPACE/depot_tools/gclient
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          gclient
 
       - name: download v8
         run: |
           mkdir v8-src && cd v8-src
-          $GITHUB_WORKSPACE/depot_tools/fetch v8
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          fetch v8
 
       - name: build v8
         run: |
           cd v8-src/v8
-          $GITHUB_WORKSPACE/depot_tools/gclient sync
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          gclient sync
           ./build/install-bulid-deps.sh
           ./tools/dev/gm.py x64.release.check
 
