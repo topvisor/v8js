@@ -23,8 +23,10 @@ jobs:
       - name: install gclient
         run: |
           git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          ls -la
           echo "$GITHUB_WORKSPACE/depot_tools" >> $GITHUB_PATH
+          echo $GITHUB_PATH
+          cat $GITHUB_PATH
+          ls -la "$GITHUB_WORKSPACE/depot_tools"
           gclient
 
       - name: download v8
