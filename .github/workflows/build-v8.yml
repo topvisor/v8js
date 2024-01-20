@@ -23,8 +23,7 @@ jobs:
       - name: install gclient
         run: |
           git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-          gclient
+          $GITHUB_WORKSPACE/depot_tools/gclient
 
       - name: download v8
         run: |
@@ -34,7 +33,7 @@ jobs:
       - name: build v8
         run: |
           cd v8-src/v8
-          gclient sync
+          $GITHUB_WORKSPACE/depot_tools/gclient sync
           ./build/install-bulid-deps.sh
           ./tools/dev/gm.py x64.release.check
 
@@ -43,17 +42,13 @@ jobs:
           cd ./out/x64.release
           mkdir -p "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
           cp ./d8 ./snapshot_blob.bin "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
-          PATH=$GITHUB_WORKSPACE/out/x64.release:$PATH
 
       #- name: change v8 version
       #  run: |
                              
-
       - name: build debian package
         run: |
-          cd "$GITHUB_WORKSPACE"
           dpkg-deb --build v8js
-          mv 
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
