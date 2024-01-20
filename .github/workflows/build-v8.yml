@@ -37,6 +37,7 @@ jobs:
           cd v8-src/v8
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           gclient sync
+          ls -la
           ./build/install-bulid-deps.sh
           ./tools/dev/gm.py x64.release.check
 
