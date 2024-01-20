@@ -23,10 +23,7 @@ jobs:
       - name: install gclient
         run: |
           git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          echo "$GITHUB_WORKSPACE/depot_tools" >> $GITHUB_PATH
-          echo $GITHUB_PATH
-          cat $GITHUB_PATH
-          ls -la "$GITHUB_WORKSPACE/depot_tools"
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           gclient
 
       - name: download v8
@@ -46,7 +43,7 @@ jobs:
           cd ./out/x64.release
           mkdir -p "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
           cp ./d8 ./snapshot_blob.bin "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
-          echo "$GITHUB_WORKSPACE/out/x64.release" >> $GITHUB_PATH
+          PATH=$GITHUB_WORKSPACE/out/x64.release:$PATH
 
       #- name: change v8 version
       #  run: |
