@@ -29,6 +29,7 @@ jobs:
       - name: download v8
         run: |
           mkdir v8-src && cd v8-src
+          ls -la
           ./depot_tools/fetch v8
 
       - name: build v8
