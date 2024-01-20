@@ -15,6 +15,7 @@ on:
 jobs:
   build-v8:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - uses: actions/checkout@v3
@@ -37,15 +38,22 @@ jobs:
           ./build/install-bulid-deps.sh
           ./tools/dev/gm.py x64.release.check
 
-      - name: update binary in deb package
+      - name: get needed files for debian package
         run: |
           cd ./out/x64.release
-          cp ./d8 ./snapshot_blob.bin ./v8_build_config.json "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
+          mkdir -p "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
+          cp ./d8 ./snapshot_blob.bin "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
+          echo "$GITHUB_WORKSPACE/out/x64.release" >> $GITHUB_PATH
+
+      #- name: change v8 version
+      #  run: |
+                             
 
       - name: build debian package
         run: |
           cd "$GITHUB_WORKSPACE"
           dpkg-deb --build v8js
+          mv 
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
