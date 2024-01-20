@@ -22,7 +22,7 @@ jobs:
 
       - name: install gclient
         run: |
-          git clone --depth 1 ettps://chromium.googlesource.com/chromium/tools/depot_tools.git
+          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
           echo "$GITHUB_WORKSPACE/depot_tools" >> $GITHUB_PATH
           gclient
 
