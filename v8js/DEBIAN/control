@@ -1,0 +1,5 @@
+Package: v8js
+Version: 0.1
+Maintainer: Artyom Artyomkin <artem.artemkin@topvisor.com>
+Architecture: amd64
+Description: v8js topvisor

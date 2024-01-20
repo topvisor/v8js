@@ -1,0 +1,54 @@
+name: build-v8
+
+on:
+  schedule:
+    # запуск ежегодно (в 00:00, 15-го января, независимо от дня недели)
+    - cron: "0 0 15 1 *"
+  push:
+    # запуск только при пуше в мастер
+    branches:
+      - "master"
+    # запуск, если изменился код пакета или пайплайна
+    paths:
+      - ".github/workflows/**/*"
+
+jobs:
+  build-v8:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install gclient
+        run: |
+          git clone --depth 1 ettps://chromium.googlesource.com/chromium/tools/depot_tools.git
+          echo "$GITHUB_WORKSPACE/depot_tools" >> $GITHUB_PATH
+          gclient
+
+      - name: download v8
+        run: |
+          mkdir v8-src && cd v8-src
+          ./depot_tools/fetch v8
+
+      - name: build v8
+        run: |
+          cd v8-src/v8
+          gclient sync
+          ./build/install-bulid-deps.sh
+          ./tools/dev/gm.py x64.release.check
+
+      - name: update binary in deb package
+        run: |
+          cd ./out/x64.release
+          cp ./d8 ./snapshot_blob.bin ./v8_build_config.json "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
+
+      - name: build debian package
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          dpkg-deb --build v8js
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: v8js
+          path: ./v8js.deb
