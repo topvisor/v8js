@@ -32,15 +32,18 @@ jobs:
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           fetch v8
 
-      - name: build v8
+      - name: sync v8
         run: |
           cd v8-src/v8
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           gclient sync
-          ls -la
+
+      - name: build v8
           pwd
-          ./build/install-bulid-deps.sh
-          ./tools/dev/gm.py x64.release.check
+          ls -la
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          ./v8-src/v8/build/install-bulid-deps.sh
+          ./v8-src/v8/tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
         run: |
