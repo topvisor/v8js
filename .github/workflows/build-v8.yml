@@ -49,8 +49,9 @@ jobs:
           ls -la v8-src/v8/build
           ls -la v8-src/v8/tools
           ls -la v8-src/v8/tools/dev
-          ./v8-src/v8/build/install-bulid-deps.sh
-          ./v8-src/v8/tools/dev/gm.py x64.release.check
+          cat v8-src/v8/build/install-bulid-deps.sh
+          v8-src/v8/build/install-bulid-deps.sh
+          v8-src/v8/tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
         run: |
