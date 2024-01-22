@@ -43,6 +43,7 @@ jobs:
           pwd
           ls -la
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          find "$GITHUB_WORKSPACE" -name "install-bulid-deps.sh"
           ./v8-src/v8/build/install-bulid-deps.sh
           ./v8-src/v8/tools/dev/gm.py x64.release.check
 
