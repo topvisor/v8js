@@ -43,15 +43,8 @@ jobs:
           pwd
           ls -la
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-          find "$GITHUB_WORKSPACE" -name "install-bulid-deps.sh"
-          ls -la v8-src
-          ls -la v8-src/v8
-          ls -la v8-src/v8/build
-          ls -la v8-src/v8/tools
-          ls -la v8-src/v8/tools/dev
-          cat v8-src/v8/build/install-bulid-deps.sh
-          v8-src/v8/build/install-bulid-deps.sh
-          v8-src/v8/tools/dev/gm.py x64.release.check
+          ./v8-src/v8/build/install-build-deps.sh
+          ./v8-src/v8/tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
         run: |
