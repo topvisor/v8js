@@ -39,6 +39,7 @@ jobs:
           gclient sync
 
       - name: build v8
+        run: |
           pwd
           ls -la
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
