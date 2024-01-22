@@ -46,8 +46,9 @@ jobs:
           find "$GITHUB_WORKSPACE" -name "install-bulid-deps.sh"
           ls -la v8-src
           ls -la v8-src/v8
-          ls -la v8-src/build
-          ls -la v8-src/tools
+          ls -la v8-src/v8/build
+          ls -la v8-src/v8/tools
+          ls -la v8-src/v8/tools/dev
           ./v8-src/v8/build/install-bulid-deps.sh
           ./v8-src/v8/tools/dev/gm.py x64.release.check
 
