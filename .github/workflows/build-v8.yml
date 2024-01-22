@@ -43,8 +43,9 @@ jobs:
           pwd
           ls -la
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-          ./v8-src/v8/build/install-build-deps.sh
-          ./v8-src/v8/tools/dev/gm.py x64.release.check
+          cd v8-src/v8
+          ./build/install-build-deps.sh
+          ./tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
         run: |
