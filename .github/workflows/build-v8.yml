@@ -79,7 +79,7 @@ jobs:
         id: definingV8Version
         run: |
           v8Version="$($GITHUB_WORKSPACE/v8js/topvisor/v8js/d8 <<< "console.log('hi');" | head -n 1 | awk '{ print $3 }' | awk -F'.' '{ print $1,$2 }' | tr ' ' '.')"
-          arch="$(awk '{ if ($1 ~ "Version:") { print $2 } }' "$GITHUB_WORKSPACE/v8js/DEBIAN/control")"
+          arch="$(awk '{ if ($1 ~ "Architecture:") { print $2 } }' "$GITHUB_WORKSPACE/v8js/DEBIAN/control")"
           echo "v8Version=$v8Version" >> $GITHUB_OUTPUT
           echo "arch=$arch" >> $GITHUB_OUTPUT
 
