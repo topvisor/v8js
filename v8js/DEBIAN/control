@@ -1,5 +1,4 @@
 Package: v8js
-Version: 12.2
 Maintainer: Artyom Artyomkin <artem.artemkin@topvisor.com>
 Architecture: amd64
 Description: Высокопроизводительный движок JavaScript, написанный на C++. Используется для исполнения JS кода в любом браузере.

@@ -93,8 +93,8 @@ jobs:
         run: |
           v8Version=${{ steps.definingV8Version.outputs.v8Version }}
           arch=${{ steps.definingV8Version.outputs.arch }}
-          # заменить версию debian пакета со старой на новую версию v8
-          sed -i "s/^Version:.*/Version: $v8Version/g" "$GITHUB_WORKSPACE/v8js/DEBIAN/control"
+          # добавить версию пакета
+          echo "Version: $v8Version" >> "$GITHUB_WORKSPACE/v8js/DEBIAN/control"
           dpkg-deb --build v8js
           mv v8js.deb v8js.$v8Version.$arch.deb
 
