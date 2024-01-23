@@ -75,8 +75,11 @@ jobs:
             v8_build_config.json \
           --target-directory "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
 
-      #- name: change v8 version
-      #  run: |
+      - name: define v8 version
+        id: defining-v8-version
+        run: |
+          v8Version="$(d8 <<< "console.log('hi');" | head -n 1 | awk '{ print $3 }' | awk -F'.' '{ print $1,$2 }' | tr ' ' '.')"
+          echo "v8Version=$v8Version" >> $GITHUB_OUTPUT
 
       - name: build debian package
         run: |
@@ -86,4 +89,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_SHA" v8js.deb
+          gh release create ${{ steps.defining-v8-version.outputs.v8Version }} v8js.deb
