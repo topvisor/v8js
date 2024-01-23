@@ -20,39 +20,33 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      #- name: install gclient
-      #  run: |
-      #    git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
-      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-      #    gclient
+      - name: install gclient
+        run: |
+          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          gclient
 
-      #- name: download v8
-      #  run: |
-      #    mkdir v8-src && cd v8-src
-      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-      #    fetch v8
+      - name: download v8
+        run: |
+          mkdir v8-src && cd v8-src
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          fetch v8
 
-      #- name: sync v8
-      #  run: |
-      #    cd v8-src/v8
-      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-      #    gclient sync
+      - name: sync v8
+        run: |
+          cd v8-src/v8
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          gclient sync
 
-      #- name: build v8
-      #  run: |
-      #    pwd
-      #    ls -la
-      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-      #    cd v8-src/v8
-      #    ./build/install-build-deps.sh
-      #    ./tools/dev/gm.py x64.release.check
+      - name: build v8
+        run: |
+          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+          cd v8-src/v8
+          ./build/install-build-deps.sh
+          ./tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
         run: |
-          ### test
-          unzip v8-src.zip
-          rm -f v8-src.zip
-          ### test
           cd ./v8-src/v8/out/x64.release
           mkdir -p "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
           cp  \
