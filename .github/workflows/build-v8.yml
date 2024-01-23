@@ -85,9 +85,10 @@ jobs:
 
       - name: build debian package
         run: |
-          dpkg-deb --build v8js
           v8Version=${{ steps.definingV8Version.outputs.v8Version }}
           arch=${{ steps.definingV8Version.outputs.arch }}
+          sed -i "s/^Version:.*/Version: $v8Version/g" "$GITHUB_WORKSPACE/v8js/DEBIAN/control"
+          dpkg-deb --build v8js
           mv v8js.deb v8js.$v8Version.$arch.deb
 
       - name: upload artifacts to release
