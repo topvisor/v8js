@@ -8,21 +8,23 @@ on:
     # запуск только при пуше в мастер
     branches:
       - "master"
-    # запуск, если изменился код пакета или пайплайна
+    # запуск, если изменился код пайплайна
     paths:
       - ".github/workflows/**/*"
 
 jobs:
   build-v8:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 140
 
     steps:
       - uses: actions/checkout@v3
 
+      # писалось с опорой на гайд https://v8.dev/docs/build
       - name: install gclient
         run: |
           git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          # обновление PATH нужно, чтобы все утилиты из depot_tools вызывались из любого места через gclient
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           gclient
 
@@ -42,17 +44,23 @@ jobs:
         run: |
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           cd v8-src/v8
+
+          # отключить использование snapshot_blob.bin
           echo "v8_use_external_startup_data = false" > ./build/args/tv-args.gn
           mkdir -p ./out/x64.release
           echo 'import("//build/args/tv-args.gn")' > ./out/x64.release/args.gn
           gn gen out/x64.release
+
+          # установить дополнительные зависимости
           ./build/install-build-deps.sh
+          # собрать и протестировать
           ./tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
         run: |
           cd ./v8-src/v8/out/x64.release
           mkdir -p "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
+          # без этих файлов d8 работать не будет
           cp  \
             d8 \
             libchrome_zlib.so \
@@ -85,6 +93,7 @@ jobs:
         run: |
           v8Version=${{ steps.definingV8Version.outputs.v8Version }}
           arch=${{ steps.definingV8Version.outputs.arch }}
+          # заменить версию debian пакета со старой на новую версию v8
           sed -i "s/^Version:.*/Version: $v8Version/g" "$GITHUB_WORKSPACE/v8js/DEBIAN/control"
           dpkg-deb --build v8js
           mv v8js.deb v8js.$v8Version.$arch.deb
@@ -113,4 +122,5 @@ jobs:
           newMinorVersion=$(( $latestMinorVersion + 1 ))
           newVersion="$latestVersionPrefix$newMinorVersion"
 
+          # выпустить релиз с указанными ресурсами (assets)
           gh release create "$newVersion" ./v8js.$v8Version.$arch.deb
