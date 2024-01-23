@@ -111,13 +111,13 @@ jobs:
 
           # взять последний тег
           if [ -z "$revlist" ]; then
-            latestVersion="v1.0.0"
+            latestVersion="v$v8Version-1"
           else
             latestVersion="$(git describe --tags "$revlist")"
           fi
 
           # вычислить новый тег
-          latestVersionPrefix="$(awk -F'.' '{ $NF=""; print }' <<< "$latestVersion" | tr " " ".")"
+          latestVersionPrefix="$(awk -F'-' '{ $NF=""; print }' <<< "$latestVersion" | tr " " "-")"
           latestMinorVersion="$(sed "s/$latestVersionPrefix//g" <<< "$latestVersion")"
           newMinorVersion=$(( $latestMinorVersion + 1 ))
           newVersion="$latestVersionPrefix$newMinorVersion"
