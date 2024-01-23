@@ -20,48 +20,68 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: install gclient
-        run: |
-          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-          gclient
+      #- name: install gclient
+      #  run: |
+      #    git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
+      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+      #    gclient
 
-      - name: download v8
-        run: |
-          mkdir v8-src && cd v8-src
-          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-          fetch v8
+      #- name: download v8
+      #  run: |
+      #    mkdir v8-src && cd v8-src
+      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+      #    fetch v8
 
-      - name: sync v8
-        run: |
-          cd v8-src/v8
-          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-          gclient sync
+      #- name: sync v8
+      #  run: |
+      #    cd v8-src/v8
+      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+      #    gclient sync
 
-      - name: build v8
-        run: |
-          pwd
-          ls -la
-          PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
-          cd v8-src/v8
-          ./build/install-build-deps.sh
-          ./tools/dev/gm.py x64.release.check
+      #- name: build v8
+      #  run: |
+      #    pwd
+      #    ls -la
+      #    PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
+      #    cd v8-src/v8
+      #    ./build/install-build-deps.sh
+      #    ./tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
         run: |
-          cd ./out/x64.release
+          ### test
+          unzip v8-src.zip
+          rm -f v8-src.zip
+          ### test
+          cd ./v8-src/v8/out/x64.release
           mkdir -p "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
-          cp ./d8 ./snapshot_blob.bin "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
+          cp  \
+            d8 \
+            libchrome_zlib.so \
+            libchrome_zlib.so.TOC \
+            libc++.so \
+            libicuuc.so \
+            libicuuc.so.TOC \
+            libthird_party_abseil-cpp_absl.so \
+            libthird_party_abseil-cpp_absl.so.TOC \
+            libthird_party_icu_icui18n.so \
+            libthird_party_icu_icui18n.so.TOC \
+            libv8_libbase.so \
+            libv8_libbase.so.TOC \
+            libv8_libplatform.so \
+            libv8_libplatform.so.TOC \
+            libv8.so \
+            libv8.so.TOC \
+            v8_build_config.json \
+          --target-directory "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
 
       #- name: change v8 version
       #  run: |
-                             
+
       - name: build debian package
         run: |
           dpkg-deb --build v8js
 
-      - name: upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: v8js
-          path: ./v8js.deb
+      - name: upload artifacts to release
+        run: |
+          gh release create "$GITHUB_REF" v8js.deb
