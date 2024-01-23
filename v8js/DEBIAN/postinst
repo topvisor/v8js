@@ -1,2 +1,2 @@
 #!/bin/bash
-ln -s /topvisor/d8tv/d8 /usr/bin/d8
+ln -s /topvisor/v8js/d8 /usr/bin/d8

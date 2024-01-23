@@ -96,4 +96,22 @@ jobs:
         run: |
           v8Version=${{ steps.definingV8Version.outputs.v8Version }}
           arch=${{ steps.definingV8Version.outputs.arch }}
-          gh release create ${{ steps.definingV8Version.outputs.v8Version }} ./v8js.$v8Version.$arch.deb
+
+          # скачать список тегов
+          git fetch --tags origin
+          revlist="$(git rev-list --tags --max-count=1)"
+
+          # взять последний тег
+          if [ -z "$revlist" ]; then
+            latestVersion="v1.0.0"
+          else
+            latestVersion="$(git describe --tags "$revlist")"
+          fi
+
+          # вычислить новый тег
+          latestVersionPrefix="$(awk -F'.' '{ $NF=""; print }' <<< "$latestVersion" | tr " " ".")"
+          latestMinorVersion="$(sed "s/$latestVersionPrefix//g" <<< "$latestVersion")"
+          newMinorVersion=$(( $latestMinorVersion + 1 ))
+          newVersion="$latestVersionPrefix$newMinorVersion"
+
+          gh release create "$newVersion" ./v8js.$v8Version.$arch.deb
