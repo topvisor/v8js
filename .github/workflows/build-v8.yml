@@ -76,10 +76,11 @@ jobs:
           --target-directory "$GITHUB_WORKSPACE/v8js/topvisor/v8js"
 
       - name: define v8 version
-        id: defining-v8-version
+        id: definingV8Version
         run: |
-          v8Version="$(d8 <<< "console.log('hi');" | head -n 1 | awk '{ print $3 }' | awk -F'.' '{ print $1,$2 }' | tr ' ' '.')"
-          echo "v8Version=$v8Version" >> $GITHUB_OUTPUT
+          v8Version="$($GITHUB_WORKSPACE/v8js/topvisor/v8js/d8 <<< "console.log('hi');" | head -n 1 | awk '{ print $3 }' | awk -F'.' '{ print $1,$2 }' | tr ' ' '.')"
+          echo "v8Version=$v8Version\n" >> $GITHUB_OUTPUT
+          echo "v8Version=$v8Version\n"
 
       - name: build debian package
         run: |
