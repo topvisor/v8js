@@ -48,6 +48,8 @@ jobs:
       #    ./tools/dev/gm.py x64.release.check
 
       - name: get needed files for debian package
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           ### test
           unzip v8-src.zip
