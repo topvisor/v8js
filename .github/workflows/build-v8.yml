@@ -86,4 +86,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF" v8js.deb
+          gh release create "$GITHUB_SHA" v8js.deb
