@@ -43,7 +43,8 @@ jobs:
           PATH=$GITHUB_WORKSPACE/depot_tools:$PATH
           cd v8-src/v8
           echo "v8_use_external_startup_data = false" > ./build/args/tv-args.gn
-          echo 'import("//build/args/custom.gn")' > out/x64.release/args.gn
+          mkdir -p ./out/x64.release
+          echo 'import("//build/args/tv-args.gn")' > ./out/x64.release/args.gn
           gn gen out/x64.release
           ./build/install-build-deps.sh
           ./tools/dev/gm.py x64.release.check
