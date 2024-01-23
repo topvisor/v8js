@@ -89,4 +89,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create ${{ steps.defining-v8-version.outputs.v8Version }} v8js.deb
+          echo ${{ steps.defining-v8-version.outputs.v8Version }}
+          gh release create ${{ steps.defining-v8-version.outputs.v8Version }} ./v8js.deb
