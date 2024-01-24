@@ -110,7 +110,7 @@ jobs:
           revlist="$(git rev-list --tags --max-count=1)"
 
           # взять последний тег
-          if [ -z "$revlist" || "$(git describe --tags $revlist | grep -o '[0-9]*\.[0-9]*')" != "$v8Version" ]; then
+          if [[ -z "$revlist" || $(git describe --tags $revlist | grep -o '[0-9]*\.[0-9]*') != "$v8Version" ]]; then
             latestVersion="v$v8Version-0"
           else
             latestVersion="$(git describe --tags "$revlist")"
