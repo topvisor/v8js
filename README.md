@@ -26,7 +26,7 @@ d8
 Пример установки:
 
 ```
-wget https://github.com/topvisor/v8js/releases/download/v1.0.3/v8js.12.3.amd64.deb
+wget https://github.com/topvisor/v8js/releases/download/v12.3-1/v8js.12.3.amd64.deb
 sudo dpkg -i v8js.12.3.amd64.deb
 ```
 
